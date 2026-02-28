@@ -1,20 +1,9 @@
-It's a test document... 
-<<<<<<< Updated upstream
-
-Version2
-=======
->>>>>>> Stashed changes
+It's a test document...
 
 Version2
 
-<<<<<<< Updated upstream
 Request (a different kind of merge)...
 
 And here goes the stash part...
-=======
+
 And this line was added from test branch
-
-request (different kind of merge)...
-
-and here it stash thing goes...
->>>>>>> Stashed changes
