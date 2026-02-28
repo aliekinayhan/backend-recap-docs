@@ -1,6 +1,9 @@
 It's a test document... 
-.v2
+
+Version2
 
 And this line added from test branch
 
 Request (a different kind of merge)...
+
+And here goes the stash part...
