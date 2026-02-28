@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="alien" class="com.ayhanekin.Alien" autowire="byName">
+        <property name="age" value="25"/>
+<!--        <property name="laptop" ref="laptop"/>-->
+    </bean>
+
+    <bean id="computer" class="com.ayhanekin.Laptop" scope="prototype"/>
+    <bean id="computer1" class="com.ayhanekin.Desktop" lazy-init="true"/>
+
+
+</beans>
+

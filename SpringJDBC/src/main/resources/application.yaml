@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: SpringJDBC
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/springjdbc
+    username: root
+    password: ekin6262
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  sql:
+    init:
+      mode: never
+
+  h2:
+    console:
+      enabled: false
