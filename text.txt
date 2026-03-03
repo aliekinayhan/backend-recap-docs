@@ -1,0 +1,6 @@
+It's a test document... 
+.v2
+
+And this line added from test branch
+
+request (different kind of merge)...
