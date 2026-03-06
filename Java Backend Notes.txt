@@ -1,0 +1,382 @@
+Java Backend Development 
+
+Maven:
+Why we have it:
+1- Creating the right project structure.
+2- Adding the set of Jars to every project
+3- Building and deploying project
+4- Convention over configuration
+Maven standardizes project structure, dependency management, build and deployment.
+
+How does Maven Works: 
+Maven reads the POM file which contains all the dependencies, plugins etc. and it’ll download those things to a local repository.
+Pom (Project Object Model): 
+Every Maven project must have a pom.xml file in the root directory.
+
+GroupId: Usually represents the organization or company (often reversed domain name format). 
+ArtifactId: Project Name 
+Version: Version of a project
+Plugins: Almost any action in project is implemented by plugins 
+Dependencies: A dependency is an external library required by the project, usually packaged as a JAR file.
+
+Lifecycles: 
+Lifecycles have phases and plugins have goals.
+Every life cycle contains multiple phases.
+There are three built-in life cyle in maven:
+
+Clean: 1- pre-clean 2- clean 3- post-clean
+
+Site : 1- pre-site  2- site  3- post-site     4- site-deploy
+
+Default/Build: Default lifecycle contains multiple phases such as validate, compile, test, package, install, deploy.
+
+!!! Phases are not doing anything but calling plugins 
+
+Plugins: 
+Maven is a plugin execution framework where every task is actually done by plugins.
+There are two types of plugins:
+Build Plugins: Will be executed during the build life cycle and they should be declared in the <build> element inside the POM file
+Reporting Plugins: Will be executed during the site lifecycle and they should be declared in the <reporting> element inside the POM file
+
+Maven Repository: 
+Local Repository : 
+In our computer
+Central Repository : 
+In the internet maven uses here to download the dependencies
+Remote Repository:  
+A remote repository is a custom repository hosted on a server.
+
+JDBC (Java Database Connectivity) : 
+What is JDBC
+JDBC is a Java API that allows Java applications to communicate with relational databases.
+It provides a standard set of interfaces that allow Java programs to:
+•	connect to databases
+
+
+•	execute SQL queries
+
+
+•	retrieve results
+
+
+•	manage transactions
+
+
+JDBC acts as a bridge between Java applications and relational databases.
+
+Architecture:
+Java Program → JDBC API → JDBC Driver → Database
+JDBC does not implement database logic.
+It only provides interfaces that drivers implement.
+
+JDBC Driver:
+A JDBC Driver is a software component that enables communication between a Java application and a database.
+Responsibilities:
+•	establishing database connections
+
+
+•	converting Java data types to database types
+
+
+•	converting database results to Java objects
+
+
+•	sending SQL commands to the database
+
+
+•	returning query results
+
+Driver Types:
+Type-1: JDBC–ODBC Bridge
+Architecture:
+Java → JDBC → ODBC → Database
+Uses an ODBC driver. 
+Problems:
+•	platform dependent
+
+
+•	requires ODBC installation
+
+
+•	performance overhead
+
+
+Removed since Java 8.
+
+Type-2: Native API Driver
+Architecture:
+Java → JDBC → Native Library → Database
+Uses database native libraries (C/C++).
+Problems:
+•	platform dependent
+
+
+•	requires native installation
+
+Type-3: Network Protocol Driver
+Architecture:
+Java → JDBC → Middleware → Database
+Middleware translates JDBC calls into database protocol.
+Advantages:
+•	database independence
+
+
+Disadvantages:
+•	requires middleware server
+
+Type-4: Thin Driver
+Architecture:
+Java → JDBC → Database
+Fully written in Java.
+Advantages:
+•	platform independent
+
+
+•	no native libraries
+
+
+•	direct communication with database
+
+
+This is the most widely used JDBC driver type.
+Examples:
+MySQL Connector/J
+PostgreSQL JDBC Driver
+Oracle JDBC Driver
+
+JDBC Core Components:
+Connection:
+Represents an active connection to the database.
+It is an interface provided by java.sql.Connection.
+It works through a JDBC Driver.
+
+Example:
+Connection connection = DriverManager.getConnection(url, username, password);
+
+Connection allows:
+createStatement()
+prepareStatement()
+commit()
+rollback()
+close()
+
+Statement:
+Used to create and execute static SQL queries.
+
+Example:
+Statement statement = connectionn.createStatement();
+ResultSet resultSet = statment.executeQuery("SELECT * FROM student");
+
+Problem:
+SQL Injection
+
+Prepared Statement:
+PreparedStatement is a precompiled SQL statement.
+
+Example:
+PreparedStatement statement =
+connection.prepareStatement( "SELECT * FROM student WHERE id=?");
+statement.setInt(1, 10);
+
+Advantages:
+•	prevents SQL injection
+
+
+•	better performance
+
+
+•	safe parameter binding
+
+ResultSet:
+Represents the result returned by a SQL query.
+
+Example:
+while(rs.next()){ String name = rs.getString("name"); }
+
+ResultSet allows navigation through rows.
+Connection Pool (Critical Concept)
+Opening a database connection is expensive.
+Therefore applications use connection pooling.
+Instead of open connection every time We use connection pool
+Popular implementations:
+HikariCP
+C3P0
+Apache DBCP
+Spring Boot default:
+HikariCP
+
+JDBC Execution Flow:
+Typical JDBC flow:
+1 Load Driver
+2 Create Connection
+3 Create Statement
+4 Execute Query
+5 Process ResultSet
+6 Close Resources
+
+Example:
+
+Connection conn = DriverManager.getConnection(url,user,pass);
+PreparedStatement stmt = conn.prepareStatement("SELECT * FROM student");
+ResultSet rs = stmt.executeQuery();
+while(rs.next()){ System.out.println(rs.getString("name"));}
+
+rs.close();
+stmt.close();
+conn.close();
+
+JDBC Problems
+JDBC requires a lot of boilerplate code:
+•	Connection handling
+•	SQL writing
+•	Object mapping
+•	Exception handling
+•	Resource closing
+
+Example problem:
+ResultSet → Java Object mapping
+Because of these issues ORM frameworks (Hibernate etc.) were introduced.
+
+
+JPA (Java Persistence API):
+JPA is a Java specification for ORM.
+Important:
+JPA is NOT a framework it only defines:
+•	interfaces
+•	annotations
+•	rules
+Implementations are provided by JPA Vendors.
+Examples:
+Hibernate
+EclipseLink
+OpenJPA
+ 
+ORM (Object Relational Mapping):
+ORM is a technique used to map objects to relational database tables.
+Problem:
+Java → Object oriented
+Database → Relational tables
+Mismatch between:
+Object Graph vs Relational Model
+ORM solves this by mapping:
+Class → Table
+Object → Row
+Field → Column
+
+JPA Architecture
+
+Application
+↓
+Spring Data JPA
+↓
+JPA Specification
+↓
+Hibernate (implementation)
+↓
+JDBC
+↓
+Database
+
+JPA internally uses JDBC.
+
+Entity: 
+An Entity is a Java class mapped to a database table.
+
+Example:
+@Entity
+@Table(name="student")
+public class Student {
+@Id
+private Long id;
+private String name;
+private String surname;
+@Transient
+private int age;
+}
+
+Mapping:
+Class → Table
+Field → Column
+Important annotations:
+@Entity
+@Table
+@Id
+@GeneratedValue
+@Column
+@Transient
+
+JPA Entity Lifecycle:
+Entities have states.
+Transient → new object not managed
+Persistent → managed by EntityManager
+Detached → no longer managed
+Removed  → scheduled for deletion
+
+EntityManager
+Central interface in JPA and responsible for persistence operations.
+Examples:
+persist()
+find()
+merge()
+remove()
+createQuery()
+
+Persistence Context
+Persistence context is a cache that stores managed entities.
+
+Fetch Types
+Eager Fetch
+Related entities loaded immediately.
+Advantages:
+simpler access
+Disadvantages:
+performance issues
+
+Lazy Fetch
+Related entities loaded only when accessed.
+Advantages:
+better performance
+Disadvantages:
+LazyInitializationException
+
+Hibernate
+Hibernate is the most popular JPA implementation.
+Hibernate is: ORM framework + JPA provider
+Hibernate internally uses JDBC.
+
+Hibernate Core Components:
+SessionFactory
+Contains:
+•	configuration
+•	entity mappings
+•	cache
+Heavy object.
+Created once per application.
+Session: 
+Represents a single interaction (active connection) with the database.
+Transaction
+Manages atomic operations.
+commit()
+rollback()
+Without commit changes are not saved.
+
+Hibernate Dirty Checking
+Hibernate automatically detects changes in entities.
+Example:
+entity.setName("Ali")
+Hibernate automatically executes:
+UPDATE query
+No manual SQL needed.
+
+Hibernate Cache
+First Level Cache
+Session-level cache and enabled by default.
+Second Level Cache
+Shared between sessions.
+Requires provider: Ehcache or Infinispan etc.
+
+HQL (Hibernate Query Language)
+Object oriented query language.
+Example:
+FROM Student WHERE id = :id
+Uses entity names instead of table names.
